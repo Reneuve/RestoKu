@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <h1>Welcome to Admin Page {{ Auth::user()->name }}</h1>

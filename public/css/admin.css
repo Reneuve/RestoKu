@@ -1,0 +1,26 @@
+*{
+    outline: none !important;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.left-nav {
+    width: 15%;
+    height: 100vh;
+    padding: 10px;
+}
+
+.left-nav .subtitle{
+    font-size: 18px;
+}
+
+.left-nav-list .active {
+    background-color: rgb(243, 243, 243) !important;
+    color: black !important;
+}

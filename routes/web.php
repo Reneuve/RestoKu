@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->middleware('guest');
+
+Route::post('logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
 });
 
 Route::get('user/login', function () {
@@ -55,9 +63,21 @@ Route::post('admin/register', [AdminController::class, 'Register']);
 
 Route::post('admin/login', [AdminController::class, 'Login']);
 
-Route::post('logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/');
+Route::middleware('auth:admins')->group(function () {
+    Route::prefix('admin')->group(function () {
+        // 'restoku/admin/'
+        Route::prefix('menu')->group(function () {
+            // 'restoku/admin/menu'
+            Route::get('/', [MenuController::class, 'view']);
+            Route::get('/create', function () {
+                return view('admins.menu.create');
+            }); // restoku/admin/menu/create
+            Route::post('/create', [MenuController::class, 'create']);
+            Route::get('/update/{id}', [MenuController::class, 'updateView']);
+            Route::post('/update', [MenuController::class, 'update']);
+            Route::get('/delete/{id}', [MenuController::class, 'delete']);
+            Route::get('/active/{id}',[MenuController::class,'activeMenu']);
+            Route::get('/nonactive/{id}',[MenuController::class,'nonActiveMenu']);
+        });
+    });
 });
