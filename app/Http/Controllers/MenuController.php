@@ -96,4 +96,29 @@ class MenuController extends Controller
         ]);
         return redirect()->back();
     }
+
+    public function viewUser(Request $request)
+    {
+        # code...
+        //isset = mengecek kalau variable itu ada isinya
+        if (isset($request->sort)) {
+            # code...
+            $data = DB::table('menus')->where('name', 'like', '%' . $request->name . '%')->where('is_active', 1)
+                ->orderBy($request->sort, $request->dir)->paginate(15);
+        } else {
+            $data = DB::table('menus')->where('name', 'like', '%' . $request->name . '%')->where('is_active', 1)->paginate(15);
+        }
+        if ($data->isEmpty()) {
+            return view('users.menu.view')->with('notfound', 'Menu Tidak Ditemukan');
+        } else {
+            return view('users.menu.view', ['menus' => $data]);
+        }
+    }
+
+    public function detail(Request $request)
+    {
+        # code...
+        $data = DB::table('menus')->where('id', $request->id)->get();
+        return view('users.menu.detail', ['menu' => $data])->with('name', $data[0]->name);
+    }
 }

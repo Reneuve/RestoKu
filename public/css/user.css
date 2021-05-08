@@ -1,0 +1,62 @@
+.underline{
+    text-decoration: underline;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.title-top {
+    font-size: 25px !important;
+    font-weight: bold;
+}
+
+.text-nav {
+    font-size: 18px !important;
+}
+
+.card-menu {
+    width: 20rem;
+    margin: 10px;
+}
+
+.card-menu:hover {
+    box-shadow: 10px 10px 5px 0px rgba(215, 215, 215, 0.75);
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(215, 215, 215, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(215, 215, 215, 0.75);
+}
+
+.menu-content {
+    background-color: #ecf0f1;
+}
+
+.left-tab-menu {
+    background-color: #3498db;
+    width: 10%;
+}
+
+.card-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.price-text {
+    font-size: 25px;
+}
+
+.line-separator {
+    width: 2px;
+    background-color: #E8E8E8;
+    height: 30px;
+}
+
+.action-btn-cart:hover {
+    box-shadow: 2px 2px 5px 0px rgba(215, 215, 215, 0.75);
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(215, 215, 215, 0.75);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(215, 215, 215, 0.75);
+}
+
+.cart-name{
+    font-size: 18px;
+}

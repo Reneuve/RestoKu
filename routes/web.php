@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,9 +38,22 @@ Route::get('user/register', function () {
     return view('users.register');
 });
 
-Route::get('user', function () {
-    return view('users.user');
-})->middleware('auth:users');
+Route::middleware('auth:users')->group(function () {
+    Route::prefix('user')->group(function () {
+        Route::get('/', function () {
+            return view('users.user');
+        });
+        Route::get('cart', [UserController::class, 'getCart']);
+        Route::post('cart', [UserController::class, 'cartBuy']);
+        Route::get('cart/add/{id}', [UserController::class, 'addItem']);
+        Route::get('cart/remove/{id}', [UserController::class, 'removeItem']);
+    });
+});
+
+Route::prefix('menu')->group(function () {
+    Route::get('/', [MenuController::class, 'viewUser']); // sama dengan /menu
+    Route::get('/{id}', [MenuController::class, 'detail']);
+});
 
 Route::post('user/register', [UserController::class, 'Register']);
 
@@ -76,8 +90,8 @@ Route::middleware('auth:admins')->group(function () {
             Route::get('/update/{id}', [MenuController::class, 'updateView']);
             Route::post('/update', [MenuController::class, 'update']);
             Route::get('/delete/{id}', [MenuController::class, 'delete']);
-            Route::get('/active/{id}',[MenuController::class,'activeMenu']);
-            Route::get('/nonactive/{id}',[MenuController::class,'nonActiveMenu']);
+            Route::get('/active/{id}', [MenuController::class, 'activeMenu']);
+            Route::get('/nonactive/{id}', [MenuController::class, 'nonActiveMenu']);
         });
     });
 });
