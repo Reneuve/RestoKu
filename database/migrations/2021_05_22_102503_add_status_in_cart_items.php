@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartsTable extends Migration
+class AddStatusInCartItems extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCartsTable extends Migration
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->tinyInteger('already_paid')->default(0);
-            $table->timestamps();
+        Schema::table('cart_items', function (Blueprint $table) {
+            //
+            $table->enum('status',['Menunggu','Diproses','Selesai'])->default('Menunggu');
         });
     }
 
@@ -28,6 +26,8 @@ class CreateCartsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::table('cart_items', function (Blueprint $table) {
+            //
+        });
     }
 }

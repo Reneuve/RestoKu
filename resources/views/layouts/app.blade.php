@@ -22,7 +22,7 @@
                     <a class="nav-link" href="/menu">Menu <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Riwayat Pembelian</a>
+                    <a class="nav-link" href="/user/history">Riwayat Pembelian</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/cart">Keranjang saya</a>

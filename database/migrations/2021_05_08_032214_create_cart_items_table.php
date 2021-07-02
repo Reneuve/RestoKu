@@ -15,8 +15,8 @@ class CreateCartItemsTable extends Migration
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('cart_id');
-            $table->integer('menu_id');
+            $table->foreignId('cart_id')->constrained('carts')->onDelete('restrict');
+            $table->foreignId('menu_id')->constrained('menus')->onDelete('restrict');
             $table->integer('quantity')->default(1);
             $table->timestamps();
         });

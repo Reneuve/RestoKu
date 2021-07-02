@@ -75,8 +75,15 @@ class MenuController extends Controller
     public function delete(Request $request)
     {
         # code...
-        DB::table('menus')->delete($request->id);
-        return redirect()->back();
+        try {
+            //code...
+            DB::table('menus')->delete($request->id);
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $data = DB::table('menus')->where('id', $request->id)->get();
+            return redirect()->back()->withErrors('Menu <strong>' . $data[0]->name . '</strong> tidak dapat dihapus');
+        }
     }
 
     public function activeMenu(Request $request)

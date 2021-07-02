@@ -43,10 +43,17 @@ Route::middleware('auth:users')->group(function () {
         Route::get('/', function () {
             return view('users.user');
         });
-        Route::get('cart', [UserController::class, 'getCart']);
-        Route::post('cart', [UserController::class, 'cartBuy']);
-        Route::get('cart/add/{id}', [UserController::class, 'addItem']);
-        Route::get('cart/remove/{id}', [UserController::class, 'removeItem']);
+        Route::prefix('cart')->group(function () {
+            Route::get('/', [UserController::class, 'getCart']);
+            Route::post('/', [UserController::class, 'cartBuy']);
+            Route::get('add/{id}', [UserController::class, 'addItem']);
+            Route::get('remove/{id}', [UserController::class, 'removeItem']);
+            Route::get('clear/{id}', [UserController::class, 'clearCart']);
+        });
+        //
+        Route::post('transaction', [UserController::class, 'transaction']);
+        Route::get('history', [UserController::class, 'history']);
+        Route::get('history/{id}', [UserController::class, 'historyDetail']);
     });
 });
 

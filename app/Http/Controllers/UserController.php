@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Cart_item;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class UserController extends Controller
         }
     }
 
-        public function cartBuy(Request $request)
+    public function cartBuy(Request $request)
     {
         # code...
         $user = Auth::guard('users')->user(); //untuk mengambil data user
@@ -94,7 +95,7 @@ class UserController extends Controller
                 ->where('cart_id', $cart->id)
                 ->join('menus', 'cart_items.menu_id', '=', 'menus.id')
                 ->select('cart_items.*', 'menus.name', 'menus.price', 'menus.image')->get();;
-            return view('users.cart', ['items' => $cartItems]);
+            return view('users.cart', ['items' => $cartItems])->with('cart_id', $cart->id);
         } else {
             return view('users.cart')->with('result', 'Ups anda belum memasukan menu apapun ke keranjang anda');
         }
@@ -129,5 +130,73 @@ class UserController extends Controller
             Cart_item::where('menu_id', $request->id)->where('cart_id', $cart->id)->delete();
         }
         return redirect()->back();
+    }
+
+    public function clearCart(Request $request)
+    {
+        # code...
+        DB::table('cart_items')->where('cart_id', $request->id)->delete();
+        return redirect()->back();
+    }
+
+    public function transaction(Request $request)
+    {
+        # code...
+        $this->validate($request, [
+            'table_number' => 'numeric|min:1|max:10'
+        ]);
+        $checkCart = Cart_item::where('cart_id', $request->id)->first();
+        if (is_null($checkCart)) {
+            return redirect()->back()->withErrors('Tambahkan Menu terlebih dahulu');
+        } else {
+            $check = Transaction::where('cart_id', $request->id)->first();
+            if (is_null($check)) {
+                $transaction = new Transaction();
+                $transaction->cart_id = $request->id;
+                $transaction->amount = $request->total;
+                $transaction->table_number = $request->table_number;
+                $transaction->order_at = now();
+                $transaction->save();
+                Cart::where('id', $request->id)->update([
+                    'already_paid' => 1
+                ]);
+                return redirect('/user/history');
+            } else {
+                Cart::where('id', $request->id)->update([
+                    'already_paid' => 1
+                ]);
+                return redirect('/user/history');
+            }
+        }
+    }
+
+    public function history(Request $request)
+    {
+        # code...
+        $user = Auth::guard('users')->user();
+        if (isset($request->sort)) {
+            $data = DB::table('transactions')
+                ->join('carts', 'carts.id', '=', 'transactions.cart_id')
+                ->where('carts.user_id', $user->id)
+                ->select('transactions.*', 'carts.user_id', 'carts.already_paid', 'carts.is_finish')
+                ->orderBy('transactions.order_at', $request->sort)
+                ->paginate(15);
+        } else {
+            $data = DB::table('transactions')
+                ->join('carts', 'carts.id', '=', 'transactions.cart_id')
+                ->where('carts.user_id', $user->id)
+                ->select('transactions.*', 'carts.user_id', 'carts.already_paid', 'carts.is_finish')
+                ->paginate(15);
+        }
+        return view('users.history', ['datas' => $data]);
+    }
+
+    public function historyDetail(Request $request)
+    {
+        # code...
+        $data = DB::table('transactions')->join('carts', 'carts.id', '=', 'transactions.cart_id')->where('transactions.id', $request->id)->get(); //get data dari cart
+        $data_item = DB::table('cart_items')
+            ->join('menus', 'menus.id', '=', 'cart_items.menu_id')->where('cart_items.cart_id', $data[0]->cart_id)->paginate(10); //mendapatkan semua item dari cart
+        return view('users.history_detail', ['datas' => $data, 'items' => $data_item]);
     }
 }

@@ -6,6 +6,13 @@
 
 @section('content')
     <h1>Daftar Menu</h1>
+    @if($errors->any())
+        <div class="alert alert-danger" role="alert">
+            @foreach ($errors->all() as $error)
+                <li>{!! $error !!}</li>
+            @endforeach
+        </div>
+    @endif
     <table class="table">
         <thead>
             <tr>
