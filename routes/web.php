@@ -100,5 +100,12 @@ Route::middleware('auth:admins')->group(function () {
             Route::get('/active/{id}', [MenuController::class, 'activeMenu']);
             Route::get('/nonactive/{id}', [MenuController::class, 'nonActiveMenu']);
         });
+        Route::prefix('order')->group(function () {
+            Route::get('/', [AdminController::class, 'order_view']);
+            Route::get('/{id}',[AdminController::class,'detail_order']);
+            Route::post('/update',[AdminController::class,'update_order']);
+            Route::get('/status/{id}',[AdminController::class,'update_status_order']);
+        });
     });
+    // admin/order
 });

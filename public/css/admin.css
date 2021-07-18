@@ -24,3 +24,56 @@ a {
     background-color: rgb(243, 243, 243) !important;
     color: black !important;
 }
+
+.btn-action-order{
+    width: 180px;
+}
+
+.dropdown-notif {
+    transform: translateY(5px);
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-notif-body {
+    padding: 10px;
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 300px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-notif-body a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-notif-body a:hover {
+    background-color: #ddd;
+}
+
+.dropdown-notif:hover .dropdown-notif-body {
+    display: block;
+}
+
+.dropdown-notif:hover .notif-btn {
+    color: rgb(233, 233, 233) !important;
+}
+
+.number-notif{
+    display: none;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
